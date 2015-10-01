@@ -94,6 +94,13 @@ struct {
     { "persist.security.", AID_SYSTEM,   0 },
     { "persist.service.bdroid.", AID_BLUETOOTH,   0 },
     { "selinux."         , AID_SYSTEM,   0 },
+    /* psw0523 add for samsung_slsi slsiap hwc */
+    { "hwc.scenario",     AID_SYSTEM,   0 },
+    { "hwc.scale",        AID_SYSTEM,   0 },
+    { "hwc.resolution",   AID_SYSTEM,   0 },
+    { "hwc.hdmimode",     AID_SYSTEM,   0 },
+    { "hwc.screendownsizing",    AID_SYSTEM,   0 },
+    /* end psw0523 */
     { NULL, 0, 0 }
 };
 
