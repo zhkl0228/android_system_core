@@ -61,7 +61,11 @@ int ion_alloc(int fd, size_t len, size_t align, unsigned int heap_mask,
         struct ion_allocation_data data = {
                 .len = len,
                 .align = align,
-		.heap_mask = heap_mask,
+#ifdef ION_NUM_HEAP_IDS
+                .heap_id_mask = heap_mask,
+#else
+                .heap_mask = heap_mask,
+#endif
                 .flags = flags,
         };
 
