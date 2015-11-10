@@ -728,6 +728,7 @@ static void import_kernel_nv(char *name, int for_emulator)
 
     if (!strcmp(name,"qemu")) {
         strlcpy(qemu, value, sizeof(qemu));
+
     } else if (!strncmp(name, "androidboot.", 12) && name_len > 12) {
         const char *boot_prop_name = name + 12;
         char prop[PROP_NAME_MAX];
@@ -736,6 +737,31 @@ static void import_kernel_nv(char *name, int for_emulator)
         cnt = snprintf(prop, sizeof(prop), "ro.boot.%s", boot_prop_name);
         if (cnt < PROP_NAME_MAX)
             property_set(prop, value);
+
+    } else if (!strcmp(name, "bootdev")) {
+        if (!strcmp(value, "2") || !strcmp(value, "emmc"))
+            property_set("ro.bootdev", "emmc");
+
+    } else if (!strcmp(name, "lcd")) {
+        char *prop;
+        char *delim = strchr(value, ',');
+
+        if (delim) {
+            *delim++ = '\0';
+
+            prop = delim;
+            delim = strstr(delim, "dpi");
+        }
+
+        property_set("ro.boot.lcd", value);
+
+        /* get lcd density info */
+        if (delim) {
+            *delim = '\0';
+            int dpi = atoi(prop);
+            if (dpi > 80 && dpi < 640)
+                property_set("ro.sf.lcd_density", prop);
+        }
     }
 }
 
