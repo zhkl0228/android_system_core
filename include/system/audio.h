@@ -60,10 +60,11 @@ typedef enum {
     AUDIO_STREAM_TTS              = 9,  /* Transmitted Through Speaker.
                                          * Plays over speaker only, silent on other devices.
                                          */
-    AUDIO_STREAM_ACCESSIBILITY    = 10, /* For accessibility talk back prompts */
-    AUDIO_STREAM_REROUTING        = 11, /* For dynamic policy output mixes */
-    AUDIO_STREAM_PATCH            = 12, /* For internal audio flinger tracks. Fixed volume */
-    AUDIO_STREAM_PUBLIC_CNT       = AUDIO_STREAM_TTS + 1,
+    AUDIO_STREAM_EXT_SPEAKER      = 10,
+    AUDIO_STREAM_ACCESSIBILITY    = 11, /* For accessibility talk back prompts */
+    AUDIO_STREAM_REROUTING        = 12, /* For dynamic policy output mixes */
+    AUDIO_STREAM_PATCH            = 13, /* For internal audio flinger tracks. Fixed volume */
+    AUDIO_STREAM_PUBLIC_CNT       = AUDIO_STREAM_EXT_SPEAKER + 1,
     AUDIO_STREAM_CNT              = AUDIO_STREAM_PATCH + 1,
 } audio_stream_type_t;
 
@@ -101,6 +102,7 @@ typedef enum {
     AUDIO_USAGE_ASSISTANCE_SONIFICATION            = 13,
     AUDIO_USAGE_GAME                               = 14,
     AUDIO_USAGE_VIRTUAL_SOURCE                     = 15,
+    AUDIO_USAGE_EXT_SPEAKER                        = 16,
 
     AUDIO_USAGE_CNT,
     AUDIO_USAGE_MAX                                = AUDIO_USAGE_CNT - 1,
