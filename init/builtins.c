@@ -528,9 +528,19 @@ int do_mount_all(int nargs, char **args)
             ret = -1;
         }
     } else if (pid == 0) {
+        char tmp[PROP_VALUE_MAX];
+
         /* child, call fs_mgr_mount_all() */
         klog_set_level(6);  /* So we can see what fs_mgr_mount_all() does */
-        fstab = fs_mgr_read_fstab(args[1]);
+
+        if (property_get("ro.bootdev", tmp)) {
+            char fpath[PATH_MAX];
+            sprintf(fpath, "%s.%s", args[1], tmp);
+            fstab = fs_mgr_read_fstab(fpath);
+        } else {
+            fstab = fs_mgr_read_fstab(args[1]);
+        }
+
         child_ret = fs_mgr_mount_all(fstab);
         fs_mgr_free_fstab(fstab);
         if (child_ret == -1) {
