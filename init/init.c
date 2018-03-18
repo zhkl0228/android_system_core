@@ -706,6 +706,22 @@ static int console_init_action(int nargs, char **args)
     return 0;
 }
 
+static bool read_mac_address(char *buf)
+{
+    int fd = open("/sys/class/net/eth0/address", O_RDONLY);
+    if (fd >= 0) {
+        int n = read(fd, buf, 128);
+        if (n <= 0) {
+            return false;
+        }
+        if (n > 0 && buf[n-1] == '\n') n--;
+        buf[n] = 0;
+        close(fd);
+        return true;
+    }
+    return false;
+}
+
 static void import_kernel_nv(char *name, int for_emulator)
 {
     char *value = strchr(name, '=');
@@ -735,8 +751,15 @@ static void import_kernel_nv(char *name, int for_emulator)
         int cnt;
 
         cnt = snprintf(prop, sizeof(prop), "ro.boot.%s", boot_prop_name);
-        if (cnt < PROP_NAME_MAX)
-            property_set(prop, value);
+        if (cnt < PROP_NAME_MAX) {
+            char mac[128];
+            memset(mac, 0, 128);
+            if(!strcmp(boot_prop_name, "serialno") && read_mac_address(mac)) {
+                property_set(prop, mac);
+            } else {
+                property_set(prop, value);
+            }
+        }
 
     } else if (!strcmp(name, "bootdev")) {
         if (!strcmp(value, "2") || !strcmp(value, "emmc"))
